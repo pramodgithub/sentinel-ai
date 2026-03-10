@@ -1,5 +1,5 @@
 from sqlalchemy import text
-from db.db import engine
+from app.db.db import engine
 
 def insert_chunk(document_id, chunk, embedding):
 
