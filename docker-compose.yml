@@ -1,0 +1,112 @@
+services:
+
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: sentinel_postgres
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./migrations/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  redis:
+    image: redis:7
+    container_name: sentinel_redis
+    ports:
+      - "6379:6379"
+
+  fastapi:
+    build: .
+    image: sentinel-ai-app
+    container_name: sentinel_api
+    depends_on:
+      - postgres
+      - redis
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+
+  fastapi_debug:
+    image: sentinel-ai-app
+    container_name: sentinel_api_debug
+    depends_on:
+      - postgres
+      - redis
+    command: >
+      python -m debugpy
+      --listen 0.0.0.0:5678
+      --wait-for-client
+      -m uvicorn app.main:app
+      --host 0.0.0.0
+      --port 8000
+      --reload
+    ports:
+      - "5678:5678"
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    profiles:
+      - debug
+
+  celery_worker:
+    image: sentinel-ai-app
+    container_name: sentinel_worker
+    depends_on:
+      - redis
+      - postgres
+    command: celery -A app.workers.celery_app worker --loglevel=INFO --concurrency=4
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+
+  celery_worker_debug:
+    image: sentinel-ai-app
+    container_name: sentinel_worker_debug
+    depends_on:
+      - redis
+      - postgres
+    command: >
+      python -m debugpy
+      --listen 0.0.0.0:5679
+      --wait-for-client
+      -m celery
+      -A app.workers.celery_app worker
+      --loglevel=DEBUG
+      --pool=solo
+      --concurrency=1
+    ports:
+      - "5679:5679"
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    profiles:
+      - debug
+
+  streamlit:
+    image: sentinel-ai-app
+    container_name: sentinel_streamlit
+    command: sh -c "streamlit run /app/app/demo_dashboard.py --server.port 8501 --server.address 0.0.0.0"
+    ports:
+      - "8501:8501"
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    working_dir: /app/app
+
+volumes:
+  postgres_data:
