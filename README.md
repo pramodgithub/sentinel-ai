@@ -1,181 +1,275 @@
-# Sentinel AI - AI-Powered Incident Management System
+🚨 Sentinel AI — Autonomous Incident Response System
 
-Sentinel AI is an intelligent incident management platform that uses AI agents to diagnose, plan, execute, and evaluate remediation for infrastructure incidents.
+An AI-powered SRE system that detects, diagnoses, plans, executes, and evaluates incident resolution workflows using agentic architecture.
 
-## Features
+⸻
 
-- **AI-Powered Diagnosis**: Intelligent analysis of incidents and root cause detection
-- **Automated Remediation**: Automated execution of remediation actions
-- **Workflow Orchestration**: Complex workflow management and execution
-- **Audit Trail**: Complete audit logging for compliance and review
-- **Vector Search**: Semantic search over incident documentation
-- **Scalable Architecture**: Built with FastAPI, Celery, and PostgreSQL
+🔥 Overview
 
-## Architecture
+Sentinel AI simulates a real-world production incident response system powered by LLM agents and orchestration.
 
-### Core Components
+It mimics how modern SRE teams operate:
 
-- **API Layer** (`app/api/`): FastAPI endpoints for incident and ingestion management
-- **Agents** (`app/agents/`): AI agents for various incident management tasks
-  - `DiagnosisAgent`: Analyzes incidents and identifies root causes
-  - `PlannerAgent`: Creates remediation action plans
-  - `ExecutorAgent`: Executes planned remediation actions
-  - `EvaluatorAgent`: Validates remediation outcomes
+Incident → Diagnosis → Planning → Execution → Evaluation → Learning
 
-- **Orchestration** (`app/orchestration/`): Workflow engine and capability registry
-- **Tools** (`app/tools/`): Action execution tools (restart containers, check metrics, etc.)
-- **Storage** (`app/storage/`): Repository pattern for data persistence
-- **LLM Integration** (`app/llm/`): Model routing and embeddings
+The system is designed to be:
+	•	Autonomous (closed-loop decision making)
+	•	Observable (metrics, cost, latency tracked)
+	•	Auditable (full reasoning + execution trace)
+	•	Extensible (plug into real infra like Kubernetes, AWS)
 
-## Getting Started
+⸻
+
+🧠 Key Features
+
+🤖 Multi-Agent Architecture
+	•	Diagnosis Agent → identifies root cause
+	•	Planner Agent → generates execution DAG
+	•	Executor Agent → runs tools/actions
+	•	Evaluator Agent → scores outcome & decides next step
+	•	Memory Agent → retrieves similar past incidents
+	•	Risk Agent → enforces guardrails
+	•	Learning Agent → improves future decisions
+
+⸻
+
+⚙️ Intelligent Execution Engine
+	•	DAG-based execution planning
+	•	Parallel diagnostics + sequential remediation
+	•	Retry & fallback strategies
+	•	Tool abstraction layer (infra-agnostic)
+
+⸻
+
+🧰 Tooling System (Simulated + Extensible)
+
+Supports real-world SRE actions:
+	•	check_logs
+	•	inspect_metrics
+	•	restart_container
+	•	monitor_service
+	•	check_health_endpoint
+	•	scale_service
+	•	clear_cache
+	•	rollback_deployment
+	•	alert_human
+	•	close_incident
+
+Each tool produces:
+	•	stochastic outputs (realistic noise)
+	•	confidence scores
+	•	recommended next actions
+
+⸻
+
+🧠 Memory-Augmented Diagnosis
+	•	Retrieves similar incidents using vector similarity
+	•	Weighs past outcomes and relevance
+	•	Improves diagnosis accuracy with experience
+
+⸻
+
+📊 Observability & Metrics
+
+Tracks LLM and system-level metrics:
+	•	total tokens used
+	•	latency per agent
+	•	cost per execution (estimated)
+	•	success rate
+	•	evaluation score
+
+⸻
+
+🔍 Evaluation Engine (Core Innovation)
+
+Instead of binary success, system evaluates:
+	•	issue resolution
+	•	system stability
+	•	action effectiveness
+	•	efficiency
+	•	confidence alignment
+
+Outputs:
+{
+  "status": "resolved | partial | failed",
+  "confidence": 0.82,
+  "recommendation": "next best action"
+}
+
+📜 Full Audit & Traceability
+
+Every execution is logged:
+	•	agent decisions
+	•	tool outputs
+	•	reasoning trace
+	•	evaluation outcome
+
+Enables:
+	•	replay
+	•	debugging
+	•	compliance audit
+
+⸻
+
+🖥️ Interactive Dashboard (Streamlit)
+
+Real-time visualization of:
+	•	execution DAG
+	•	step-by-step agent flow
+	•	tool outputs
+	•	evaluation panel
+	•	LLM usage (tokens, latency, cost)
+
+⸻
+
+🏗️ Architecture
+
+                ┌────────────────────┐
+                │   Streamlit UI     │
+                └────────┬───────────┘
+                         ↓
+                ┌────────────────────┐
+                │   FastAPI Backend  │
+                └────────┬───────────┘
+                         ↓
+          ┌────────────────────────────────┐
+          │      Orchestration Engine      │
+          └────────────────────────────────┘
+               ↓          ↓         ↓
+            Diagnosis   Planner   Executor
+               ↓          ↓         ↓
+             Memory      DAG     Tool Layer
+               ↓                    ↓
+          Vector Store        Simulated / Real Infra
+               ↓
+          Redis State + Streams
+
+
+🧱 Tech Stack
+	•	Backend: FastAPI
+	•	Workers: Celery
+	•	State & Streaming: Redis (Streams + KV)
+	•	LLM Integration: Multi-provider router
+	•	UI: Streamlit
+	•	Containerization: Docker
+
+⸻
+
+🚀 Getting Started
 
 ### Prerequisites
+- [Docker](https://www.docker.com/get-started) installed on your machine
+- [Git](https://git-scm.com/) installed
 
-- Python 3.11+
-- PostgreSQL 15+
-- Redis 7+
-- Docker & Docker Compose (optional)
+### Setup & Run
 
-### Installation
-
-1. Clone the repository:
+1. **Clone the repository**
 ```bash
-git clone <repo-url>
-cd sentinel-ai
+   git clone 
+   cd 
 ```
 
-2. Create a virtual environment:
+2. **Start the project**
 ```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+   docker compose up --build
 ```
 
-3. Install dependencies:
+3. **Run in background (optional)**
 ```bash
-pip install -r requirements.txt
+   docker compose up --build -d
 ```
 
-4. Set up environment variables:
+4. **Stop the project**
 ```bash
-cp .env.example .env
-# Edit .env with your configuration
+   docker compose down
 ```
 
-5. Initialize the database:
+### Useful Commands
 ```bash
-sqlite migrations/init.sql  # Or use your database
+# View logs
+docker compose logs -f
+
+# View logs for a specific service
+docker compose logs -f 
+
+# Restart a specific service
+docker compose restart 
+
+# Rebuild a specific service
+docker compose up --build 
 ```
 
-### Running Locally
 
-1. Start the application:
-```bash
-uvicorn app.main:app --reload
-```
 
-The API will be available at `http://localhost:8000`
+🧪 Demo Scenarios
 
-2. View API documentation:
-- Swagger UI: `http://localhost:8000/docs`
-- ReDoc: `http://localhost:8000/redoc`
+The system includes prebuilt incident simulations:
+	•	High CPU Spike
+	•	Service Down
+	•	Memory Leak
+	•	Error Rate Spike
+	•	False Alert
+	•	Restart Failure
+	•	Performance Drift
+	•	Cache Issue
+	•	Bad Deployment
+	•	High Risk Escalation
 
-### Running with Docker
+Each scenario:
+	•	triggers different workflows
+	•	tests different tools
+	•	generates unique audit logs
 
-1. Build and start all services:
-```bash
-docker-compose -f docker/docker-compose.yml up -d
-```
+⸻
 
-2. View logs:
-```bash
-docker-compose -f docker/docker-compose.yml logs -f
-```
+🔐 Safety & Guardrails
+	•	RBAC-ready tool execution
+	•	human escalation for high-risk actions
+	•	audit logging for all decisions
+	•	no direct infra execution (agent-based model)
 
-## API Endpoints
+⸻
 
-### Health Checks
-- `GET /health` - Health check
-- `GET /ready` - Readiness check
+🧠 Design Principles
+	•	Tool Abstraction: decouple decision from execution
+	•	Closed Loop: evaluate → retry → adapt
+	•	Memory-Driven Intelligence
+	•	Explainability First
+	•	Production Readiness (simulated)
 
-### Incidents
-- `GET /incidents/` - List incidents
-- `GET /incidents/{incident_id}` - Get incident details
-- `POST /incidents/` - Create incident
-- `PUT /incidents/{incident_id}` - Update incident
-- `DELETE /incidents/{incident_id}` - Delete incident
+⸻
 
-### Ingestion
-- `POST /ingestion/documents` - Ingest documents
-- `POST /ingestion/incidents` - Ingest incident data
-- `GET /ingestion/status` - Get ingestion status
+🔮 Future Enhancements
+	•	Kubernetes / AWS real integration
+	•	multi-model comparison (GPT vs open models)
+	•	advanced drift detection
+	•	policy-based guardrails
+	•	cost-aware planning
 
-## Testing
+⸻
 
-Run tests with:
-```bash
-pytest
-```
+🎯 Why This Project Matters
 
-Run with coverage:
-```bash
-pytest --cov=app --cov-report=html
-```
+This project demonstrates:
+	•	agentic AI system design
+	•	real-world SRE automation patterns
+	•	LLM evaluation & observability
+	•	scalable orchestration architecture
 
-## Development
+⸻
 
-### Project Structure
+👨‍💻 Author
 
-```
-sentinel-ai/
-├── app/                    # Main application code
-│   ├── api/               # FastAPI routes
-│   ├── agents/            # AI agents
-│   ├── orchestration/     # Workflow engine
-│   ├── tools/             # Action tools
-│   ├── ingestion/         # Data ingestion
-│   ├── llm/               # LLM integration
-│   ├── storage/           # Data repositories
-│   ├── core/              # Core utilities
-│   ├── schemas/           # Pydantic models
-│   ├── services/          # Business logic
-│   └── main.py            # Application entry point
-├── migrations/            # Database migrations
-├── docker/                # Docker configuration
-├── tests/                 # Unit and integration tests
-├── scripts/               # Utility scripts
-├── requirements.txt       # Python dependencies
-└── README.md              # This file
-```
+Built as part of advanced exploration into:
+	•	AI systems design
+	•	autonomous workflows
+	•	production-grade LLM applications
 
-### Coding Standards
+⸻
 
-- Use async/await for I/O operations
-- Follow PEP 8 style guide
-- Add docstrings to all functions
-- Write unit tests for new functionality
+⭐ If you find this useful
 
-## Configuration
+Give it a star ⭐ — or better, use it as inspiration to build something even more powerful.
+:::
 
-Configuration is managed through environment variables. See `app/core/config.py`:
-
-- `DATABASE_URL`: Database connection string
-- `LLM_MODEL`: LLM model to use (default: gpt-4)
-- `LLM_API_KEY`: API key for LLM provider
-- `CELERY_BROKER_URL`: Redis connection for Celery
-- `DEBUG`: Enable debug mode
-- `ENV`: Environment (development, production, testing)
-
-## Contributing
-
-1. Create a feature branch
-2. Make your changes
-3. Write tests for new functionality
-4. Submit a pull request
-
-## License
-
-MIT License - see LICENSE file for details
-
-## Support
-
-For issues and questions, please open an issue on GitHub.
+⸻
