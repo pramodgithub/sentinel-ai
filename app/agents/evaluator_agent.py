@@ -82,6 +82,7 @@ class EvaluatorAgent(BaseAgent):
         append_thinking_trace(state.execution_id, {
             "agent": "evaluation",
             "step": "post_execution_analysis",
+            "observations": obervations,
             "decision": enriched_evaluation["recommendation"],
             "confidence": enriched_evaluation["confidence"],
             "status": enriched_evaluation["status"],

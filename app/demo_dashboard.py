@@ -643,6 +643,7 @@ if "execution_id" in st.session_state:
                     agent    = t.get("agent", "unknown").upper()
                     step     = t.get("step", "")
                     decision = t.get("decision", "")
+                    observations = t.get("observations", "")
                     llm_metrics = t.get("llm_metrics", {})
                     token_label = (
                                         f"[{agent}] → {step}  |  "
@@ -658,6 +659,9 @@ if "execution_id" in st.session_state:
                         if "input" in t:
                             st.markdown('<span style="font-size:9px;letter-spacing:2px;color:#4b5563">INPUT</span>', unsafe_allow_html=True)
                             st.json(t["input"])
+                        if observations:
+                            st.markdown('<span style="font-size:9px;letter-spacing:2px;color:#4b5563">OBSERVATIONS</span>', unsafe_allow_html=True)
+                            st.json(observations)    
                         if decision:
                             st.markdown(f'<div class="think-dec"><b>DECISION</b><br>{decision}</div>', unsafe_allow_html=True)
                         if "confidence" in t:
