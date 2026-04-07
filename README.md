@@ -1,6 +1,6 @@
 🚨 Sentinel AI — Autonomous Incident Response System
 
-An AI-powered SRE system that detects, diagnoses, plans, executes, and evaluates incident resolution workflows using agentic architecture.
+An AI-powered SRE Co-pilot system that detects, diagnoses, plans, executes, and evaluates incident resolution workflows using agentic architecture.
 
 ⸻
 
@@ -59,7 +59,12 @@ Each tool produces:
 	•	stochastic outputs (realistic noise)
 	•	confidence scores
 	•	recommended next actions
-
+##Tools screenshot
+<p align="center">
+  <img src="assets/screenshots/task_results.png" alt="tasks" width="800"/>
+  <br/>
+  <em>Real-time task execution visualization dashboard</em>
+</p>
 ⸻
 
 🧠 Memory-Augmented Diagnosis
@@ -89,12 +94,12 @@ Instead of binary success, system evaluates:
 	•	efficiency
 	•	confidence alignment
 
-Outputs:
-{
-  "status": "resolved | partial | failed",
-  "confidence": 0.82,
-  "recommendation": "next best action"
-}
+##Evaluation screenshot
+<p align="center">
+  <img src="assets/screenshots/evaluation_thinking_panel.png" alt="evaluation_thinking_panel" width="800"/>
+  <br/>
+  <em>Evaluation & AI Thinking Panel observabilty visualization dashboard</em>
+</p>
 
 📜 Full Audit & Traceability
 
