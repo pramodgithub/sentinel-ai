@@ -12,7 +12,7 @@ class IncidentService:
 
             result = db.execute(
                 text("""
-                SELECT description
+                SELECT id, service, description, severity
                 FROM incidents
                 WHERE id = :id
                 """),
@@ -23,7 +23,11 @@ class IncidentService:
                 raise Exception(f"Incident {incident_id} not found")
 
             return {
-                "description": result[0]
+                "id": str(result[0]),
+                "service": result[1],
+                "description": result[2],
+                "severity": result[3]
+
             }
 
         finally:

@@ -11,3 +11,4 @@ sentence-transformers
 debugpy
 streamlit
 requests
+mcp

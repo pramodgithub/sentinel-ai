@@ -18,6 +18,26 @@ services:
     ports:
       - "6379:6379"
 
+  mcp_server:
+    build: .
+    container_name: sentinel_mcp
+    command: python app/mcp/sentinel_server.py
+    ports:
+      - "8001:8001"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+      - redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/sse"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
   fastapi:
     build: .
     image: sentinel-ai-app
@@ -39,6 +59,7 @@ services:
     depends_on:
       - postgres
       - redis
+      - mcp_server
     command: >
       python -m debugpy
       --listen 0.0.0.0:5678
@@ -63,6 +84,7 @@ services:
     depends_on:
       - redis
       - postgres
+      - mcp_server
     command: celery -A app.workers.celery_app worker --loglevel=INFO --concurrency=4
     volumes:
       - .:/app
@@ -102,6 +124,7 @@ services:
     depends_on:
       - postgres
       - redis
+      - mcp_server
     volumes:
       - .:/app
     env_file:
