@@ -341,6 +341,63 @@ The codebase is a reference implementation for building autonomous systems that 
 
 ---
 
+## 🎯 Scaling - Full AWS Architecture
+
+Internet
+    │
+    ▼
+ALB (public)
+    ├── /api/*  → FastAPI EC2 x2 (target group)
+    └── /mcp/*  → MCP Server EC2 x2 (target group)
+                        │
+                        ▼
+              ElastiCache Redis
+                        │
+              ┌─────────┴──────────┐
+              ▼                    ▼
+    Celery Worker EC2 x3     RDS Primary
+                                   │
+                             RDS Read Replica
+
+
+
+**AWS Services replacing local containers**
+
+**redis**	- ElastiCache (Redis)	- Managed auto-failover, no cluster needed for moderate load
+**postgres**	- RDS Postgres	- Managed backups, read replicas, multi-AZ
+**nginx/LB**	- ALB (Application Load Balancer)	- Routes to FastAPI and MCP instances
+
+**Redis — without cluster**
+Single ElastiCache node is fine if you don't need HA. Just update the URL:
+```
+# .env
+REDIS_URL=redis://sentinel-redis.abc123.cache.amazonaws.com:6379
+```
+Your Celery config picks this up:
+```
+	# celery_app.py
+	import os
+	broker_url = os.getenv("REDIS_URL")
+	result_backend = os.getenv("REDIS_URL")
+```
+
+**Postgres — Primary + Read Replica**
+**RDS setup:**
+
+1 Primary — handles all writes
+1 Read Replica — handles all reads
+
+Replace the docker-compose.yml from folder
+	app
+	--scale
+	  -- docker-compose.yml
+	  -- Dockerfile.api	
+	  -- Dockerfile.mcp
+	  -- Dockerfile.worker
+
+
+---
+
 ## 👨‍💻 Author & Contributions
 
 Built as part of advanced exploration into:
