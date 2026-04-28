@@ -342,6 +342,7 @@ The codebase is a reference implementation for building autonomous systems that 
 ---
 
 ## 🎯 Scaling - Full AWS Architecture
+```
 
 Internet
     │
@@ -359,7 +360,7 @@ ALB (public)
                                    │
                              RDS Read Replica
 
-
+```
 
 **AWS Services replacing local containers**
 
